@@ -1,20 +1,17 @@
-#pragma once
-#pragma once
 #ifndef ALUMNO_H
 #define ALUMNO_H
 
+#include "Usuario.h"
 #include <string>
 using namespace std;
 
-class Alumno {
-private:
-	string nombre;
-	string apellido;
-	string correo;
-	string password;
-public:
-	Alumno(const string& correoE, const string& pass)
-		: correo(correoE), password(pass) {}
+class Alumno : public Usuario{
+	private:
+		string carrera;
+	public:
+		Alumno(const string& tipo,const string& user,const string& pass);
+		string getCarrera();
+		void run(); 
 };
 
 #endif

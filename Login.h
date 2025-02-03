@@ -1,4 +1,3 @@
-#pragma
 #ifndef LOGIN__H
 #define LOGIN__H
 

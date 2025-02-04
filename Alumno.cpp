@@ -19,7 +19,7 @@
 //	Registro usuarioActual(tipo,user,pass,salario);
     Cuentas gestorCuentas("usuarios.txt");
 	
-    sf::RenderWindow window(sf::VideoMode(800, 500), "Login");
+    sf::RenderWindow window(sf::VideoMode(800, 500), "Alumno");
     
     // imagen de fondo
     sf::Texture fondoTexture;

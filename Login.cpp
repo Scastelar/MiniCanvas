@@ -16,7 +16,7 @@ void Login::run() {
 
     // imagen de fondo
     sf::Texture fondoTexture;
-    if (!fondoTexture.loadFromFile("unitec.jpg")) {
+    if (!fondoTexture.loadFromFile("fondo1.png")) {
         std::cerr << "Error al cargar la imagen de fondo." << std::endl;
         return;
     }
@@ -34,32 +34,34 @@ void Login::run() {
 	textoError.setFillColor(sf::Color::Red);
 
     sf::Text textoUsuario("Usuario:", font, 24);
-    textoUsuario.setPosition(150, 120);
+    textoUsuario.setFillColor(sf::Color::Black);
+    textoUsuario.setPosition(150, 180);
 
     sf::Text textoContrasena("Contraseña:", font, 24);
-    textoContrasena.setPosition(150, 200);
+    textoContrasena.setFillColor(sf::Color::Black);
+    textoContrasena.setPosition(150, 260);
 
     // textboxs
     sf::RectangleShape campoUsuario(sf::Vector2f(300, 40));
-    campoUsuario.setPosition(300, 120);
+    campoUsuario.setPosition(300, 180);
     campoUsuario.setFillColor(sf::Color::White);
 
     sf::RectangleShape campoContrasena(sf::Vector2f(300, 40));
-    campoContrasena.setPosition(300, 200);
+    campoContrasena.setPosition(300, 260);
     campoContrasena.setFillColor(sf::Color::White);
 
     sf::Text textoInputUsuario("", font, 20);
-    textoInputUsuario.setPosition(310, 125);
+    textoInputUsuario.setPosition(310, 185);
     textoInputUsuario.setFillColor(sf::Color::Black);
 
     sf::Text textoInputContrasena("", font, 20);
-    textoInputContrasena.setPosition(310, 210);
+    textoInputContrasena.setPosition(310, 265);
     textoInputContrasena.setFillColor(sf::Color::Black);
 
     // Botones
     sf::RectangleShape botonLogin(sf::Vector2f(200, 50));
     botonLogin.setPosition(285, 350);
-    botonLogin.setFillColor(sf::Color::Blue);
+    botonLogin.setFillColor(sf::Color(171, 97, 169));
 
     sf::Text textoLogin("Login", font, 24);
     textoLogin.setPosition(350, 360);

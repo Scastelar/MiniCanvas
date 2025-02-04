@@ -13,13 +13,13 @@ void Registro::run() {
 //	Registro usuarioActual(tipo,user,pass);
     Cuentas gestorCuentas("usuarios.txt");
 	
-    sf::RenderWindow window(sf::VideoMode(800, 500), "Login");
+    sf::RenderWindow window(sf::VideoMode(800, 500), "Acceso");
     
  
 
     // imagen de fondo
     sf::Texture fondoTexture;
-    if (!fondoTexture.loadFromFile("fondo1.png")) {
+    if (!fondoTexture.loadFromFile("fondo2.png")) {
         std::cerr << "Error al cargar la imagen de fondo." << std::endl;
         return;
     }
@@ -34,7 +34,7 @@ void Registro::run() {
     
           std::string titulo = "Bienvenido, " + this->getUser() + "!";
     sf::Text tituloTxt(titulo, font, 20);
-	tituloTxt.setPosition(295, 150);
+	tituloTxt.setPosition(295, 70);
 	tituloTxt.setFillColor(sf::Color::Black);
  
 	
@@ -44,63 +44,72 @@ void Registro::run() {
 	
     
 
-    // Botones
-    //Opciones de Usuario
+   
+    //Texturas
+	sf::Texture accesoT;
+    if (!accesoT.loadFromFile("access-control.png")) {  
+        std::cerr << "Error al cargar la imagen\n";
+        return;
+    }
+    sf::Texture maestroT;
+    if (!maestroT.loadFromFile("school.png")) {  
+        std::cerr << "Error al cargar la imagen\n";
+        return;
+    }
+    sf::Texture alumnoT;
+    if (!alumnoT.loadFromFile("graduation.png")) {  
+        std::cerr << "Error al cargar la imagen\n";
+        return;
+    }
+    sf::Texture claseT;
+    if (!claseT.loadFromFile("knowledge.png")) {  
+        std::cerr << "Error al cargar la imagen\n";
+        return;
+    }
+    sf::Texture assignT;
+    if (!assignT.loadFromFile("user.png")) {  
+        std::cerr << "Error al cargar la imagen\n";
+        return;
+    }
+
+	 // Botones
+    sf::Sprite accessButton;
+    accessButton.setTexture(accesoT);
+    accessButton.setPosition(37, 20); 
+    
+    sf::Sprite maestroButton;
+    maestroButton.setTexture(maestroT);
+    maestroButton.setPosition(32, 120); 
+    
+    sf::Sprite alumnoButton;
+    alumnoButton.setTexture(alumnoT);
+    alumnoButton.setPosition(32, 200); 
+    
+    sf::Sprite claseButton;
+    claseButton.setTexture(claseT);
+    claseButton.setPosition(32, 280); 
+    
+    sf::Sprite asignarButton;
+    asignarButton.setTexture(assignT);
+    asignarButton.setPosition(32, 360); 
+    
     sf::RectangleShape addUserButton(sf::Vector2f(170, 40));
-    addUserButton.setPosition(100, 250);
-    addUserButton.setFillColor(sf::Color::Cyan);
+    addUserButton.setPosition(295, 200);
+    addUserButton.setFillColor(sf::Color(171, 97, 169));
     sf::Text addUserTxt("Agregar Usuario", font, 18);
-    addUserTxt.setPosition(112, 257);
-
-	 sf::RectangleShape editUserButton(sf::Vector2f(170, 40));
-    editUserButton.setPosition(100, 300);
-    editUserButton.setFillColor(sf::Color::Cyan);
-    sf::Text editUserTxt("Editar Usuario", font, 18);
-    editUserTxt.setPosition(112, 307);
+    addUserTxt.setPosition(307, 207);
     
-    sf::RectangleShape delUserButton(sf::Vector2f(170, 40));
-    delUserButton.setPosition(100, 350);
-    delUserButton.setFillColor(sf::Color::Cyan);
+      sf::RectangleShape delUser(sf::Vector2f(170, 40));
+    delUser.setPosition(295, 300);
+    delUser.setFillColor(sf::Color(171, 97, 169));
     sf::Text delUserTxt("Eliminar Usuario", font, 18);
-    delUserTxt.setPosition(112, 357);
-    
-    //Opciones de Clase
-	sf::RectangleShape addClassButton(sf::Vector2f(170, 40));
-    addClassButton.setPosition(315, 250);
-    addClassButton.setFillColor(sf::Color::Magenta);
-    sf::Text addClassTxt("Agregar Clase", font, 18);
-    addClassTxt.setPosition(327, 257);
-
-	 sf::RectangleShape editClassButton(sf::Vector2f(170, 40));
-    editClassButton.setPosition(315, 300);
-    editClassButton.setFillColor(sf::Color::Magenta);
-    sf::Text editClassTxt("Editar Clase", font, 18);
-    editClassTxt.setPosition(327, 307);
-    
-    sf::RectangleShape delClassButton(sf::Vector2f(170, 40));
-    delClassButton.setPosition(315, 350);
-    delClassButton.setFillColor(sf::Color::Magenta);
-    sf::Text delClassTxt("Eliminar Clase", font, 18);
-    delClassTxt.setPosition(327, 357);
-    
-    //Opciones extra
-	sf::RectangleShape asignarMaestro(sf::Vector2f(170, 40));
-    asignarMaestro.setPosition(530, 250);
-    asignarMaestro.setFillColor(sf::Color::Green);
-    sf::Text asignarMaestroTxt("Asignar Maestro", font, 18);
-    asignarMaestroTxt.setPosition(542, 257);
-
-	 sf::RectangleShape asignarAlumno(sf::Vector2f(170, 40));
-    asignarAlumno.setPosition(530, 300);
-    asignarAlumno.setFillColor(sf::Color::Green);
-    sf::Text asignarAlumnoTxt("Asignar Alumno", font, 18);
-    asignarAlumnoTxt.setPosition(542, 307);
+    delUserTxt.setPosition(303, 307);
     
     sf::RectangleShape logoutButton(sf::Vector2f(170, 40));
-    logoutButton.setPosition(530, 350);
+    logoutButton.setPosition(500, 300);
     logoutButton.setFillColor(sf::Color::Red);
     sf::Text logoutTxt("Cerrar Sesion", font, 18);
-    logoutTxt.setPosition(542, 357);
+    logoutTxt.setPosition(512, 307);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -112,11 +121,12 @@ void Registro::run() {
             // Manejo de botones
             if (event.type == sf::Event::MouseButtonPressed) {
              
-            if (addUserButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+              if (addUserButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                   
                     AgregarUsuario window;
                     window.run();
                 } 
+            
              
             if (logoutButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                    window.close(); 
@@ -132,24 +142,14 @@ void Registro::run() {
         window.clear();
         window.draw(fondo);
         window.draw(tituloTxt);
-        window.draw(addUserButton);
-        window.draw(addUserTxt);
-        window.draw(editUserButton);
-        window.draw(editUserTxt);
-        window.draw(delUserButton);
-        window.draw(delUserTxt);
-        window.draw(addClassButton);
-        window.draw(addClassTxt);
-        window.draw(editClassButton);
-        window.draw(editClassTxt);
-        window.draw(delClassButton);
-        window.draw(delClassTxt);
-        window.draw(asignarMaestro);
-        window.draw(asignarMaestroTxt);
-        window.draw(asignarAlumno);
-        window.draw(asignarAlumnoTxt);
-        window.draw(logoutButton);
-        window.draw(logoutTxt);
+        window.draw(accessButton);
+        window.draw(maestroButton);
+        window.draw(alumnoButton);
+        window.draw(claseButton);
+        window.draw(asignarButton);
+        window.draw(addUserButton);window.draw(addUserTxt);
+        window.draw(delUser);window.draw(delUserTxt);
+        window.draw(logoutButton);window.draw(logoutTxt);
         if (!textoError.getString().isEmpty()) {
     	window.draw(textoError);
 		}

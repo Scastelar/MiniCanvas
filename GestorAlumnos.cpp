@@ -1,20 +1,19 @@
-#include "Login.h"
-#include "Registro.h"
-#include "Cuentas.h"
-#include "GestorMaestros.h"
 #include "GestorAlumnos.h"
+#include "GestorMaestros.h"
 #include "GestorClases.h"
 #include "Asignacion.h"
-#include "AgregarUsuario.h"
-#include <iostream>
+#include "Cuentas.h"
 
-Registro::Registro(const string& tipo,const string& user,const string& pass)
-		: Usuario(tipo,user,pass){
+	GestorAlumnos::GestorAlumnos(const Registro& usuario):
+		user(usuario){
 		}
 
-void Registro::run() {
-	
-	Registro usuarioActual(this->getTipo(),this->getUser(),this->getPassword());
+	Registro GestorAlumnos::getUser(){
+		return user;
+	}
+
+    void GestorAlumnos::run() {	
+	Registro usuarioActual(this->getUser());
     Cuentas gestorCuentas("usuarios.txt");
 	
     sf::RenderWindow window(sf::VideoMode(800, 500), "Acceso");
@@ -36,10 +35,6 @@ void Registro::run() {
         return;
     }
     
-          std::string titulo = "Bienvenido, " + this->getUser() + "!";
-    sf::Text tituloTxt(titulo, font, 20);
-	tituloTxt.setPosition(295, 70);
-	tituloTxt.setFillColor(sf::Color::Black);
  
 	
     sf::Text textoError("", font, 20);
@@ -124,44 +119,30 @@ void Registro::run() {
 
             // Manejo de botones
             if (event.type == sf::Event::MouseButtonPressed) {
-            	
-            	if (maestroButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+             
+              if (accessButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                   	window.close();
-                    GestorMaestros maestros(usuarioActual);
-                    maestros.run();
+                    Registro acceso(this->getUser());
+                    acceso.run();
                 } 
                 
-                if (alumnoButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+            if (maestroButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                   	window.close();
-                    GestorAlumnos alumnos(usuarioActual);
-                    alumnos.run();
+                    GestorMaestros maestros(this->getUser());
+                    maestros.run();
             } 
-            
-             if (asignarButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                  	window.close();
-                    Asignacion asignar(usuarioActual);
-                    asignar.run();
-            }
             
             if (claseButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                   	window.close();
-                    GestorClases alumnos(usuarioActual);
+                    GestorClases alumnos(this->getUser());
                     alumnos.run();
             } 
-             
-              if (addUserButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                  
-                    AgregarUsuario window;
-                    window.run();
-                } 
-            
-             
-            if (logoutButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                   window.close(); 
-                    Login window;
-                    window.run();
-                    return;
-                }
+                
+            if (asignarButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                  	window.close();
+                    Asignacion asignar(this->getUser());
+                    asignar.run();
+            }
             
         }
     }
@@ -169,15 +150,11 @@ void Registro::run() {
 
         window.clear();
         window.draw(fondo);
-        window.draw(tituloTxt);
         window.draw(accessButton);
         window.draw(maestroButton);
         window.draw(alumnoButton);
         window.draw(claseButton);
         window.draw(asignarButton);
-        window.draw(addUserButton);window.draw(addUserTxt);
-        window.draw(delUser);window.draw(delUserTxt);
-        window.draw(logoutButton);window.draw(logoutTxt);
         if (!textoError.getString().isEmpty()) {
     	window.draw(textoError);
 		}

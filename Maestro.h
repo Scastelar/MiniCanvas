@@ -2,6 +2,8 @@
 #define MAESTRO_H
 
 #include "Usuario.h"
+#include "Examen.h"
+#include "Tarea.h"
 #include <string>
 using namespace std;
 
@@ -15,10 +17,10 @@ class Maestro : public Usuario{
 		double getSalario() const;
 		
 		void run(); 
-		//void crearExamen(string nombre);
-		//void modificarExamen(Examen examen);
-		//void eliminarExamen(Examen examen);
-		//void agregarTarea(string desc, int prioridad,string fecha,bool estado);
+		void crearExamen(Examen examen);
+		void modificarExamen(Examen examen);
+		void eliminarExamen(Examen examen);
+		void agregarTarea(Tarea tarea);
 		
 };
 

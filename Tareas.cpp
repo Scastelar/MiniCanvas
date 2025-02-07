@@ -1,24 +1,20 @@
+#include "Examenes.h"
+#include "Tareas.h"
 #include "Cuentas.h"
-#include "ComboBox.h"
-#include "Login.h"
-#include "Maestro.h"
-#include "GestorExamenes.h"
-#include "GestorTareas.h"
 
-	Maestro::Maestro(const string& tipo,const string& user,const string& pass)
-		: Usuario("MAESTRO",user,pass), salario(0){
+	Tareas::Tareas(const Alumno& usuario):
+		user(usuario){
+		}
+
+	Alumno Tareas::getUser(){
+		return user;
 	}
-	
-	double Maestro::getSalario() const{
-		return salario;
-	}
-	
-	void Maestro::run() {
-	
-	Maestro usuarioActual(this->getTipo(),this->getUser(),this->getPassword());
+
+    void Tareas::run() {	
+	Alumno usuarioActual(this->getUser());
     Cuentas gestorCuentas("usuarios.txt");
 	
-    sf::RenderWindow window(sf::VideoMode(800, 500), "Maestro");
+    sf::RenderWindow window(sf::VideoMode(800, 500), "Tareas");
     
  
 
@@ -37,17 +33,16 @@
         return;
     }
     
-          std::string titulo = "Bienvenido, " + this->getUser() + "!";
-    sf::Text tituloTxt(titulo, font, 20);
-	tituloTxt.setPosition(295, 70);
-	tituloTxt.setFillColor(sf::Color::Black);
  
 	
     sf::Text textoError("", font, 20);
 	textoError.setPosition(240, 380);
 	textoError.setFillColor(sf::Color::Red);
 	
-	//Texturas
+    
+
+   
+    //Texturas
 	sf::Texture examT;
     if (!examT.loadFromFile("exam.png")) {  
         std::cerr << "Error al cargar la imagen\n";
@@ -63,10 +58,10 @@
         std::cerr << "Error al cargar la imagen\n";
         return;
     }
-    
 
-    // Botones
-    sf::Sprite accessButton;
+
+	 // Botones
+	sf::Sprite accessButton;
     accessButton.setTexture(accesoT);
     accessButton.setPosition(37, 20); 
     
@@ -78,14 +73,9 @@
     tareaButton.setTexture(tareaT);
     tareaButton.setPosition(32, 200); 
     
-   
 
-    //Cerrar Sesion
-    sf::RectangleShape logoutButton(sf::Vector2f(170, 40));
-    logoutButton.setPosition(550, 350);
-    logoutButton.setFillColor(sf::Color::Red);
-    sf::Text logoutTxt("Cerrar Sesion", font, 18);
-    logoutTxt.setPosition(562, 357);
+    
+
 
     while (window.isOpen()) {
         sf::Event event;
@@ -97,24 +87,17 @@
             // Manejo de botones
             if (event.type == sf::Event::MouseButtonPressed) {
              
-          if (examButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+              if (examButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                   	window.close();
-                    GestorExamenes maestros(usuarioActual);
-                    maestros.run();
+                    Examenes tareas(this->getUser());
+                    tareas.run();
                 } 
                 
-                if (tareaButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+			 if (accessButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                   	window.close();
-                     GestorTareas alumnos(usuarioActual);
-                    alumnos.run();
-            } 
-             
-            if (logoutButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                   window.close(); 
-                    Login window;
-                    window.run();
-                    return;
-                }
+                    Alumno acceso(this->getUser());
+                    acceso.run();
+                } 
             
         }
     }
@@ -122,15 +105,14 @@
 
         window.clear();
         window.draw(fondo);
-        window.draw(tituloTxt);
-         window.draw(examButton);
+		window.draw(accessButton);
+        window.draw(examButton);
         window.draw(tareaButton);
-        window.draw(accessButton);
-        window.draw(logoutButton);
-        window.draw(logoutTxt);
+      
         if (!textoError.getString().isEmpty()) {
     	window.draw(textoError);
 		}
         window.display();
     }
 }
+

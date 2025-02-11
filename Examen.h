@@ -1,8 +1,10 @@
-#ifndef EXAMEN_h
-#define EXAMEN_h
+#ifndef EXAMEN_H
+#define EXAMEN_H
 
+#include <iostream>
+#include <vector>
+#include <fstream>
 #include <string>
-#include "Clase.h"
 #include "Alumno.h"
 
 using namespace std;
@@ -10,32 +12,26 @@ using namespace std;
 class Examen {
 	private:
 		string nombre;
-		Clase clase;
 		int puntos;
-		bool estado;
+		int duracion;
+		vector<string> preguntas;
+		vector<string> respuestas;
+		bool estado=true;
 	public:
-    	Examen(string& nombre, Clase& clase, int puntos, bool estado);
+    	Examen(string nombres, int _puntos);
 		
-		string getNombre(){
-			return nombre;
-		}	
+		string getNombre();
 			 
-		Clase getClase(){
-			return clase;
-		}
 		
-		int getPuntos(){
-			return puntos;
-		}
+		int getPuntos();
 		
-		bool getEstado(){
-			return estado;
-		}
+		bool getEstado();
+    	void agregarPregunta(string pregunta);
+	   	void guardarExamen() ;
 		
-		void crearPregunta();
-		void calificar();
-		void verResultados();
-		bool verRespuestas();		
+		//void calificar();
+		//void verResultados();
+		//bool verRespuestas();		
 	};
 
 #endif

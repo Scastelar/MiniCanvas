@@ -1,41 +1,37 @@
 #ifndef TAREA_H
 #define TAREA_H
 
+#include <iostream>
+#include <fstream>
 #include <string>
-#include "Clase.h"
 #include "Alumno.h"
 
 using namespace std;
 
-class Examen {
+class Tarea {
 	private:
 		string nombre;
-		Clase clase;
 		int prioridad;
+		int puntos;
 		bool estado;
 	public:
-    	Examen(string nombre, int prioridad,string fecha,bool estado);
-		
-		string getNombre(){
-			return nombre;
-		}	
-			 
-		Clase getClase(){
-			return clase;
+    	Tarea(string nombres, int _puntos,int _prioridad) :
+    		nombre(nombres),puntos(_puntos),prioridad(_prioridad){
 		}
 		
-		int getPrioridad(){
-			return prioridad;
-		}
+		string getNombre();
+		int getPrioridad();
+		bool getEstado();
 		
-		bool getEstado(){
-			return estado;
-		}
-		
-		void crearPregunta();
+		int getPuntos();
+
+	    void guardarTarea();
+		/*
+		void crearPregunta(int cantidad);
 		void calificar();
 		void verResultados();
-		bool verRespuestas();		
+		bool verRespuestas();
+		*/		
 	};
 
 #endif

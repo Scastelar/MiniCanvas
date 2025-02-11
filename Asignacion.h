@@ -13,6 +13,8 @@ public:
 	Asignacion(const Registro& usuario);
     void run();
     Registro getUser();
+    void assignAlumno();
+    void assignMaestro();
 };
 
 #endif

@@ -3,19 +3,35 @@
 
 #include "Usuario.h"
 #include "Clase.h"
+#include "Alumno.h"
+#include "Maestro.h"
+#include "Cuentas.h"
 #include <string>
+#include <iostream>
+#include <vector>
+#include <fstream>
 
 using namespace std;
 
 class Registro : public Usuario{
+	private:
+		string archivo;
+		vector<Clase> clases;
 	public:
 		//constructor
 		Registro(const string& tipo,const string& user,const string& pass);
-	   
+  
 	    void run(); 
-	    void crearClase(Clase clase);
+	    string LowerCase(const std::string& str);
+		void leerClases(vector<Clase>& clases);
+	    void crearClase(string& nombre, Maestro& profesor);
 	    void editarClase(Clase clase);
-	    void eliminarClase(Clase clase);
+	    void eliminarClase(const string& nombre);
+	    void agregarRegistro();
+		void eliminarRegistro();
+		void editarUsuario();
+
+
 };
 
 #endif

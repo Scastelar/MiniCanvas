@@ -5,14 +5,16 @@
 #include "ComboBox.h"
 #include "Registro.h"
 
-
 class GestorClases {
 private:
-	Registro user;
+    Registro user;  
 public:
-	GestorClases(const Registro& usuario);
+    GestorClases(Registro usuario);
     void run();
     Registro getUser();
+    void addClass();
+    void eliminarClase();
 };
 
 #endif
+

@@ -21,7 +21,7 @@
 	Alumno usuarioActual(this->getTipo(),this->getUser(),this->getPassword());
     Cuentas gestorCuentas("usuarios.txt");
 	
-    sf::RenderWindow window(sf::VideoMode(800, 500), "Maestro");
+    sf::RenderWindow window(sf::VideoMode(800, 500), "Alumno");
     
  
 

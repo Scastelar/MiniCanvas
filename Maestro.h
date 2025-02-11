@@ -9,7 +9,7 @@ using namespace std;
 
 class Maestro : public Usuario{
 	private:
-		double salario;
+		double salario=0;
 	public:
 		Maestro(const string& tipo,const string& user,const string& pass);
 		
@@ -17,10 +17,10 @@ class Maestro : public Usuario{
 		double getSalario() const;
 		
 		void run(); 
-		void crearExamen(Examen examen);
+		void crearExamen(string nombre,int puntos,int preguntas);
 		void modificarExamen(Examen examen);
 		void eliminarExamen(Examen examen);
-		void agregarTarea(Tarea tarea);
+		void crearTarea(string nombre,int puntos,int preguntas);
 		
 };
 

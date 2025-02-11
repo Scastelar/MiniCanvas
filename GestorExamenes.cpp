@@ -9,6 +9,8 @@
 	Maestro GestorExamenes::getUser(){
 		return user;
 	}
+	
+	void addExamenFrame();
 
     void GestorExamenes::run() {	
 	Maestro usuarioActual(this->getUser());
@@ -116,10 +118,9 @@
                     acceso.run();
                 } 
             
-             // if (addExamen.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                  
-                   
-             //   } 
+              if (addExamen.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+             	addExamenFrame();        
+              } 
         }
     }
         
@@ -141,4 +142,210 @@
         window.display();
     }
 }
+
+void addExamenFrame() {
+    sf::RenderWindow ventana(sf::VideoMode(800, 500), "Examen");
+    sf::Font fuente;
+    if (!fuente.loadFromFile("consola.ttf")) {
+        std::cerr << "Error al cargar la fuente!" << std::endl;
+        return;
+    }
+    
+    // Imagen de fondo
+    sf::Texture fondoTexture;
+    if (!fondoTexture.loadFromFile("fondo3.png")) {
+        std::cerr << "Error al cargar la imagen de fondo." << std::endl;
+        return;
+    }
+    sf::Sprite fondo(fondoTexture);
+
+    // Textos
+    sf::Text textoClase("Nombre de la Clase:", fuente, 20);
+    textoClase.setPosition(50, 50);
+    textoClase.setFillColor(sf::Color::Black);
+
+    sf::Text textoPreguntas("Cantidad de Preguntas:", fuente, 20);
+    textoPreguntas.setPosition(50, 100);
+    textoPreguntas.setFillColor(sf::Color::Black);
+
+    sf::Text textoNombreExamen("Nombre del Examen:", fuente, 20);
+    textoNombreExamen.setPosition(50, 200); // Nueva posición para el nombre del examen
+    textoNombreExamen.setFillColor(sf::Color::Black);
+
+    sf::Text botonTexto("Crear Examen", fuente, 20);
+    botonTexto.setPosition(50, 250);
+    botonTexto.setFillColor(sf::Color::White);
+
+    sf::RectangleShape botonCrear(sf::Vector2f(200, 40));
+    botonCrear.setPosition(50, 250);
+    botonCrear.setFillColor(sf::Color(171, 97, 169));
+
+    sf::Text botonGuardarTexto("Guardar Examen", fuente, 20);
+    botonGuardarTexto.setPosition(50, 400); // Cambiar la posición para que esté visible
+    botonGuardarTexto.setFillColor(sf::Color::White);
+
+    sf::RectangleShape botonGuardar(sf::Vector2f(200, 40));
+    botonGuardar.setPosition(50, 400); // Cambiar la posición para que esté visible
+    botonGuardar.setFillColor(sf::Color(171, 97, 169));
+
+    sf::String nombreClase;
+    sf::String cantidadPreguntasStr;
+    sf::String nombreExamen; // Nueva variable para el nombre del examen
+    sf::Text textoNombreClase("", fuente, 20);
+    textoNombreClase.setPosition(300, 50);
+    textoNombreClase.setFillColor(sf::Color::Black);
+
+    sf::Text textoCantidadPreguntas("", fuente, 20);
+    textoCantidadPreguntas.setPosition(300, 100);
+    textoCantidadPreguntas.setFillColor(sf::Color::Black);
+
+    sf::Text textoNombreExamenInput("", fuente, 20);
+    textoNombreExamenInput.setPosition(300, 200); // Posición del campo de entrada
+    textoNombreExamenInput.setFillColor(sf::Color::Black);
+
+    struct Pregunta {
+        sf::String texto;
+        std::string tipo;
+    };
+
+    std::vector<Pregunta> preguntas;
+    std::vector<std::string> tiposDePregunta = {"Verdadero/Falso", "Selección", "Enumerada"};
+    std::vector<int> tipoSeleccionado;
+
+    bool escribiendoClase = true;
+    bool escribiendoCantidad = false;
+    bool escribiendoNombreExamen = false; // Nueva variable para el estado de escritura del nombre del examen
+    bool escribiendoPregunta = false;
+    int preguntaActual = -1;
+    bool examenCreado = false;
+
+    while (ventana.isOpen()) {
+        sf::Event evento;
+        while (ventana.pollEvent(evento)) {
+            if (evento.type == sf::Event::Closed)
+                ventana.close();
+
+            if (evento.type == sf::Event::TextEntered) {
+                if (escribiendoClase) {
+                    if (evento.text.unicode == 13) {
+                        escribiendoClase = false;
+                        escribiendoCantidad = true;
+                    } else if (evento.text.unicode == 8 && !nombreClase.isEmpty()) {
+                        nombreClase.erase(nombreClase.getSize() - 1);
+                    } else if (evento.text.unicode < 128) {
+                        nombreClase += evento.text.unicode;
+                    }
+                } else if (escribiendoCantidad) {
+                    if (evento.text.unicode == 13) {
+                        escribiendoCantidad = false;
+                    } else if (evento.text.unicode == 8 && !cantidadPreguntasStr.isEmpty()) {
+                        cantidadPreguntasStr.erase(cantidadPreguntasStr.getSize() - 1);
+                    } else if (evento.text.unicode >= '0' && evento.text.unicode <= '9') {
+                        cantidadPreguntasStr += evento.text.unicode;
+                    }
+                } else if (escribiendoNombreExamen) { // Manejo del nombre del examen
+                    if (evento.text.unicode == 13) {
+                        escribiendoNombreExamen = false; // Cambia el estado al terminar
+                    } else if (evento.text.unicode == 8 && !nombreExamen.isEmpty()) {
+                        nombreExamen.erase(nombreExamen.getSize() - 1);
+                    } else if (evento.text.unicode < 128) {
+                        nombreExamen += evento.text.unicode;
+                    }
+                } else if (escribiendoPregunta && preguntaActual >= 0) {
+                    if (evento.text.unicode == 8 && !preguntas[preguntaActual].texto.isEmpty()) {
+                        preguntas[preguntaActual].texto.erase(preguntas[preguntaActual].texto.getSize() - 1);
+                    } else if (evento.text.unicode < 128 && evento.text.unicode != 13) {
+                        preguntas[preguntaActual].texto += evento.text.unicode;
+                    } else if (evento.text.unicode == 13) {
+                        escribiendoPregunta = false; 
+                    }
+                }
+            }
+
+            if (evento.type == sf::Event::MouseButtonPressed) {
+                if (evento.mouseButton.button == sf::Mouse::Left) {
+                    sf::Vector2f posMouse(evento.mouseButton.x, evento.mouseButton.y);
+
+                    if (botonCrear.getGlobalBounds().contains(posMouse)) {
+                        int numPreguntas = std::stoi(cantidadPreguntasStr.toAnsiString());
+                        preguntas.resize(numPreguntas, {"", "Verdadero/Falso"});
+                        tipoSeleccionado.resize(numPreguntas, 0);
+                        examenCreado = true;
+                    }
+
+                    if (botonGuardar.getGlobalBounds().contains(posMouse) && examenCreado) {
+                        std::ofstream archivo(nombreExamen.toAnsiString() + "_examen.txt"); // Guarda con el nuevo nombre
+                        archivo << "Clase: " << nombreClase.toAnsiString() << "\n";
+                        for (size_t i = 0; i < preguntas.size(); i++) {
+                            archivo << "Pregunta " << i + 1 << ": " << preguntas[i].texto.toAnsiString()
+                                    << " [" << preguntas[i].tipo << "]\n";
+                        }
+                        archivo.close();
+                    }
+
+                    // Manejo de preguntas y tipos
+                    if (examenCreado) {
+                        for (size_t i = 0; i < preguntas.size(); i++) {
+                            sf::FloatRect areaPregunta(50, 300 + (i * 50), 400, 30);
+                            if (areaPregunta.contains(posMouse)) {
+                                escribiendoPregunta = true;
+                                preguntaActual = i;
+                                break; 
+                            }
+
+                            sf::FloatRect areaTipo(470, 300 + (i * 50), 200, 30);
+                            if (areaTipo.contains(posMouse)) {
+                                tipoSeleccionado[i] = (tipoSeleccionado[i] + 1) % tiposDePregunta.size();
+                                preguntas[i].tipo = tiposDePregunta[tipoSeleccionado[i]];
+                            }
+                        }
+                    } else {
+                        escribiendoPregunta = false;
+                    }
+
+                    // Iniciar escritura del nombre del examen
+                    if (textoNombreExamenInput.getGlobalBounds().contains(posMouse)) {
+                        escribiendoNombreExamen = true;
+                    }
+                }
+            }
+        }
+
+        textoNombreClase.setString(nombreClase);
+        textoCantidadPreguntas.setString(cantidadPreguntasStr);
+        textoNombreExamenInput.setString(nombreExamen); // Actualiza el texto mostrado
+
+        ventana.clear();
+        ventana.draw(fondo);
+        ventana.draw(textoClase);
+        ventana.draw(textoPreguntas);
+        ventana.draw(textoNombreExamen);
+        ventana.draw(textoNombreClase);
+        ventana.draw(textoCantidadPreguntas);
+        ventana.draw(textoNombreExamenInput); // Dibuja el campo de entrada del nombre del examen
+
+        ventana.draw(botonCrear);
+        ventana.draw(botonTexto);
+
+        if (examenCreado) {
+            for (size_t i = 0; i < preguntas.size(); i++) {
+                sf::Text textoPregunta(preguntas[i].texto, fuente, 18);
+                textoPregunta.setPosition(50, 300 + (i * 50));
+                textoPregunta.setFillColor(sf::Color::Black);
+                ventana.draw(textoPregunta);
+
+                sf::Text textoTipo(tiposDePregunta[tipoSeleccionado[i]], fuente, 18);
+                textoTipo.setPosition(470, 300 + (i * 50));
+                textoTipo.setFillColor(sf::Color(171, 97, 169));
+                ventana.draw(textoTipo);
+            }
+
+            ventana.draw(botonGuardar);
+            ventana.draw(botonGuardarTexto);
+        }
+
+        ventana.display();
+    }
+}
+
 

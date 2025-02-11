@@ -10,7 +10,7 @@ using namespace std;
 void Login::run() {
 	
 	Cuentas gestorCuentas("usuarios.txt");
-	gestorCuentas.crearUsuario("REGISTRO","Registro","2025");
+	gestorCuentas.crearUsuario("REGISTRO","registro","2025");
 	
     sf::RenderWindow window(sf::VideoMode(800, 500), "Login");
 
@@ -30,7 +30,7 @@ void Login::run() {
         return;
     }
     sf::Text textoError("", font, 20);
-	textoError.setPosition(240, 380);
+	textoError.setPosition(220, 430);
 	textoError.setFillColor(sf::Color::Red);
 
     sf::Text textoUsuario("Usuario:", font, 24);
@@ -138,6 +138,9 @@ while (window.isOpen()) {
 		                return;
 						}
 					}
+				}
+				else {
+					textoError.setString("Credenciales incorrectas.");
 				}
             }	
         }

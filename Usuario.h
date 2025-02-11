@@ -17,6 +17,14 @@ class Usuario {
 		
 		string getPassword() const;
 		
+		void setUser(string username){
+			user=username;
+		}
+		
+		void setPassword(string pass){
+			password=pass;
+		}
+		
 		bool validarContrasena(const string& pass) const;
     		
 	};

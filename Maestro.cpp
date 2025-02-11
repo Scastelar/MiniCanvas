@@ -6,7 +6,7 @@
 #include "GestorTareas.h"
 
 	Maestro::Maestro(const string& tipo,const string& user,const string& pass)
-		: Usuario("MAESTRO",user,pass), salario(0){
+		: Usuario("MAESTRO",user,pass){
 	}
 	
 	double Maestro::getSalario() const{

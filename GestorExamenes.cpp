@@ -35,16 +35,10 @@
         return;
     }
     
- 
-	
     sf::Text textoError("", font, 20);
 	textoError.setPosition(240, 380);
 	textoError.setFillColor(sf::Color::Red);
 	
-    
-
-   
-    //Texturas
 	sf::Texture examT;
     if (!examT.loadFromFile("exam.png")) {  
         std::cerr << "Error al cargar la imagen\n";
@@ -75,7 +69,6 @@
     tareaButton.setTexture(tareaT);
     tareaButton.setPosition(32, 200); 
     
-
     
     //Opciones de Examen
     sf::RectangleShape addExamen(sf::Vector2f(170, 40));
@@ -169,28 +162,28 @@ void addExamenFrame() {
     textoPreguntas.setFillColor(sf::Color::Black);
 
     sf::Text textoNombreExamen("Nombre del Examen:", fuente, 20);
-    textoNombreExamen.setPosition(50, 200); // Nueva posición para el nombre del examen
+    textoNombreExamen.setPosition(50, 150); // Nueva posición para el nombre del examen
     textoNombreExamen.setFillColor(sf::Color::Black);
 
     sf::Text botonTexto("Crear Examen", fuente, 20);
-    botonTexto.setPosition(50, 250);
+    botonTexto.setPosition(50, 200);
     botonTexto.setFillColor(sf::Color::White);
 
     sf::RectangleShape botonCrear(sf::Vector2f(200, 40));
-    botonCrear.setPosition(50, 250);
+    botonCrear.setPosition(50, 200);
     botonCrear.setFillColor(sf::Color(171, 97, 169));
 
     sf::Text botonGuardarTexto("Guardar Examen", fuente, 20);
-    botonGuardarTexto.setPosition(50, 400); // Cambiar la posición para que esté visible
+    botonGuardarTexto.setPosition(50, 400);
     botonGuardarTexto.setFillColor(sf::Color::White);
 
     sf::RectangleShape botonGuardar(sf::Vector2f(200, 40));
-    botonGuardar.setPosition(50, 400); // Cambiar la posición para que esté visible
+    botonGuardar.setPosition(50, 400); 
     botonGuardar.setFillColor(sf::Color(171, 97, 169));
 
     sf::String nombreClase;
     sf::String cantidadPreguntasStr;
-    sf::String nombreExamen; // Nueva variable para el nombre del examen
+    sf::String nombreExamen; 
     sf::Text textoNombreClase("", fuente, 20);
     textoNombreClase.setPosition(300, 50);
     textoNombreClase.setFillColor(sf::Color::Black);
@@ -200,7 +193,7 @@ void addExamenFrame() {
     textoCantidadPreguntas.setFillColor(sf::Color::Black);
 
     sf::Text textoNombreExamenInput("", fuente, 20);
-    textoNombreExamenInput.setPosition(300, 200); // Posición del campo de entrada
+    textoNombreExamenInput.setPosition(300, 150); 
     textoNombreExamenInput.setFillColor(sf::Color::Black);
 
     struct Pregunta {
@@ -214,10 +207,10 @@ void addExamenFrame() {
 
     bool escribiendoClase = true;
     bool escribiendoCantidad = false;
-    bool escribiendoNombreExamen = false; // Nueva variable para el estado de escritura del nombre del examen
+    bool escribiendoNombreExamen = false; 
     bool escribiendoPregunta = false;
-    int preguntaActual = -1;
     bool examenCreado = false;
+    int preguntaActual = -1;
 
     while (ventana.isOpen()) {
         sf::Event evento;
@@ -238,14 +231,16 @@ void addExamenFrame() {
                 } else if (escribiendoCantidad) {
                     if (evento.text.unicode == 13) {
                         escribiendoCantidad = false;
+                        escribiendoNombreExamen = true;
                     } else if (evento.text.unicode == 8 && !cantidadPreguntasStr.isEmpty()) {
                         cantidadPreguntasStr.erase(cantidadPreguntasStr.getSize() - 1);
                     } else if (evento.text.unicode >= '0' && evento.text.unicode <= '9') {
                         cantidadPreguntasStr += evento.text.unicode;
                     }
-                } else if (escribiendoNombreExamen) { // Manejo del nombre del examen
+                } else if (escribiendoNombreExamen) { 
                     if (evento.text.unicode == 13) {
-                        escribiendoNombreExamen = false; // Cambia el estado al terminar
+                        escribiendoNombreExamen = false; 
+                        escribiendoPregunta = true;
                     } else if (evento.text.unicode == 8 && !nombreExamen.isEmpty()) {
                         nombreExamen.erase(nombreExamen.getSize() - 1);
                     } else if (evento.text.unicode < 128) {
@@ -274,26 +269,26 @@ void addExamenFrame() {
                     }
 
                     if (botonGuardar.getGlobalBounds().contains(posMouse) && examenCreado) {
-                        std::ofstream archivo(nombreExamen.toAnsiString() + "_examen.txt"); // Guarda con el nuevo nombre
+                        std::ofstream archivo(nombreExamen.toAnsiString() + "_examen.txt"); 
                         archivo << "Clase: " << nombreClase.toAnsiString() << "\n";
                         for (size_t i = 0; i < preguntas.size(); i++) {
                             archivo << "Pregunta " << i + 1 << ": " << preguntas[i].texto.toAnsiString()
                                     << " [" << preguntas[i].tipo << "]\n";
                         }
                         archivo.close();
+                        ventana.close();
                     }
 
-                    // Manejo de preguntas y tipos
                     if (examenCreado) {
                         for (size_t i = 0; i < preguntas.size(); i++) {
-                            sf::FloatRect areaPregunta(50, 300 + (i * 50), 400, 30);
+                            sf::FloatRect areaPregunta(50, 250 + (i * 50), 400, 30);
                             if (areaPregunta.contains(posMouse)) {
                                 escribiendoPregunta = true;
                                 preguntaActual = i;
                                 break; 
                             }
 
-                            sf::FloatRect areaTipo(470, 300 + (i * 50), 200, 30);
+                            sf::FloatRect areaTipo(470, 250 + (i * 50), 200, 30);
                             if (areaTipo.contains(posMouse)) {
                                 tipoSeleccionado[i] = (tipoSeleccionado[i] + 1) % tiposDePregunta.size();
                                 preguntas[i].tipo = tiposDePregunta[tipoSeleccionado[i]];
@@ -303,7 +298,6 @@ void addExamenFrame() {
                         escribiendoPregunta = false;
                     }
 
-                    // Iniciar escritura del nombre del examen
                     if (textoNombreExamenInput.getGlobalBounds().contains(posMouse)) {
                         escribiendoNombreExamen = true;
                     }
@@ -313,7 +307,7 @@ void addExamenFrame() {
 
         textoNombreClase.setString(nombreClase);
         textoCantidadPreguntas.setString(cantidadPreguntasStr);
-        textoNombreExamenInput.setString(nombreExamen); // Actualiza el texto mostrado
+        textoNombreExamenInput.setString(nombreExamen); 
 
         ventana.clear();
         ventana.draw(fondo);
@@ -322,7 +316,7 @@ void addExamenFrame() {
         ventana.draw(textoNombreExamen);
         ventana.draw(textoNombreClase);
         ventana.draw(textoCantidadPreguntas);
-        ventana.draw(textoNombreExamenInput); // Dibuja el campo de entrada del nombre del examen
+        ventana.draw(textoNombreExamenInput); 
 
         ventana.draw(botonCrear);
         ventana.draw(botonTexto);
@@ -330,12 +324,12 @@ void addExamenFrame() {
         if (examenCreado) {
             for (size_t i = 0; i < preguntas.size(); i++) {
                 sf::Text textoPregunta(preguntas[i].texto, fuente, 18);
-                textoPregunta.setPosition(50, 300 + (i * 50));
+                textoPregunta.setPosition(50, 250 + (i * 50));
                 textoPregunta.setFillColor(sf::Color::Black);
                 ventana.draw(textoPregunta);
 
                 sf::Text textoTipo(tiposDePregunta[tipoSeleccionado[i]], fuente, 18);
-                textoTipo.setPosition(470, 300 + (i * 50));
+                textoTipo.setPosition(470, 250 + (i * 50));
                 textoTipo.setFillColor(sf::Color(171, 97, 169));
                 ventana.draw(textoTipo);
             }

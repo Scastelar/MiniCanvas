@@ -3,13 +3,9 @@
 
 #include "Usuario.h"
 #include "Clase.h"
-#include "Alumno.h"
-#include "Maestro.h"
 #include "Cuentas.h"
 #include <string>
-#include <iostream>
-#include <vector>
-#include <fstream>
+
 
 using namespace std;
 
@@ -24,7 +20,7 @@ class Registro : public Usuario{
 	    void run(); 
 	    string LowerCase(const std::string& str);
 		void leerClases(vector<Clase>& clases);
-	    void crearClase(string& nombre, Maestro& profesor);
+	    void crearClase(int id, string& nombre, Maestro& profesor);
 	    void editarClase(Clase clase);
 	    void eliminarClase(const string& nombre);
 	    void agregarRegistro();

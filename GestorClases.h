@@ -2,7 +2,6 @@
 #define GESTOR_CLASES_H
 
 #include <SFML/Graphics.hpp>
-#include "ComboBox.h"
 #include "Registro.h"
 
 class GestorClases {

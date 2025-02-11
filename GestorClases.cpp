@@ -6,15 +6,14 @@
 
 	GestorClases::GestorClases(Registro usuario):
 		user(usuario){
-		}
+	}
 
 	Registro GestorClases::getUser(){
 		return user;
 	}
 
 	
-	
-    void GestorClases::run() {	
+void GestorClases::run() {	
 	Registro usuarioActual = this->getUser();
     Cuentas gestorCuentas("usuarios.txt");
 	
@@ -179,74 +178,97 @@
     }
 }
 
-void GestorClases::addClass(){
-	Cuentas gestorCuentas("usuarios.txt");
-	sf::RenderWindow addWindow(sf::VideoMode(300, 350), "Agregar Clase");
-	sf::Font font;
-	font.loadFromFile("consola.ttf");
-	
-	sf::Text titulo("Crear Clase", font, 24); 
-	titulo.setPosition(50, 20);
-	titulo.setFillColor(sf::Color::Black);
+void GestorClases::addClass() {
+    Cuentas gestorCuentas("usuarios.txt");
+    sf::RenderWindow addWindow(sf::VideoMode(300, 400), "Agregar Clase");
+    sf::Font font;
+    font.loadFromFile("consola.ttf");
+    
+    sf::Text titulo("Crear Clase", font, 24); 
+    titulo.setPosition(50, 20);
+    titulo.setFillColor(sf::Color::Black);
 
-	sf::Text nomTxt("Nombre:", font, 20); 
-	nomTxt.setPosition(50, 70);
-	nomTxt.setFillColor(sf::Color::Black);
-	
-	sf::RectangleShape campoNombre ({200, 30});
-	campoNombre.setPosition(50, 110);
-	campoNombre.setFillColor(sf::Color::White);
-	campoNombre.setOutlineColor(sf::Color::Black);
-	campoNombre.setOutlineThickness(2);
-	
-	sf::Text textoInputNombre("", font, 20);
-	textoInputNombre.setPosition(50, 110); 
-	textoInputNombre.setFillColor(sf::Color::Black);
-	
-	sf::Text maestroTxt("Maestro:", font, 20); 
-	maestroTxt.setPosition(50, 160);
-	maestroTxt.setFillColor(sf::Color::Black);
-		
-	sf::RectangleShape campoMaestro({200, 30});
-	campoMaestro.setPosition(50, 200); 
-	campoMaestro.setFillColor(sf::Color::White);
-	campoMaestro.setOutlineColor(sf::Color::Black);
-	campoMaestro.setOutlineThickness(2);
-		
-	sf::Text textoInputMaestro("", font, 20);
-	textoInputMaestro.setPosition(50, 200); 
-	textoInputMaestro.setFillColor(sf::Color::Black);
-	
-	sf::RectangleShape boton({200, 40});
-	boton.setPosition(50, 260); 
-	boton.setFillColor(sf::Color::Black);
-	
-	sf::Text textoBoton("Agregar", font, 20);
-	textoBoton.setPosition(115, 270); 
-	textoBoton.setFillColor(sf::Color::White);
+    sf::Text idTxt("ID:", font, 20); 
+    idTxt.setPosition(50, 70);
+    idTxt.setFillColor(sf::Color::Black);
+    
+    sf::RectangleShape campoID({200, 30});
+    campoID.setPosition(50, 100);
+    campoID.setFillColor(sf::Color::White);
+    campoID.setOutlineColor(sf::Color::Black);
+    campoID.setOutlineThickness(2);
+    
+    sf::Text textoInputID("", font, 20);
+    textoInputID.setPosition(50, 100); 
+    textoInputID.setFillColor(sf::Color::Black);
+
+    sf::Text nomTxt("Nombre:", font, 20); 
+    nomTxt.setPosition(50, 140);
+    nomTxt.setFillColor(sf::Color::Black);
+    
+    sf::RectangleShape campoNombre({200, 30});
+    campoNombre.setPosition(50, 170);
+    campoNombre.setFillColor(sf::Color::White);
+    campoNombre.setOutlineColor(sf::Color::Black);
+    campoNombre.setOutlineThickness(2);
+    
+    sf::Text textoInputNombre("", font, 20);
+    textoInputNombre.setPosition(50, 170); 
+    textoInputNombre.setFillColor(sf::Color::Black);
+    
+    sf::Text maestroTxt("Maestro:", font, 20); 
+    maestroTxt.setPosition(50, 210);
+    maestroTxt.setFillColor(sf::Color::Black);
+        
+    sf::RectangleShape campoMaestro({200, 30});
+    campoMaestro.setPosition(50, 240); 
+    campoMaestro.setFillColor(sf::Color::White);
+    campoMaestro.setOutlineColor(sf::Color::Black);
+    campoMaestro.setOutlineThickness(2);
+        
+    sf::Text textoInputMaestro("", font, 20);
+    textoInputMaestro.setPosition(50, 240); 
+    textoInputMaestro.setFillColor(sf::Color::Black);
+    
+    sf::RectangleShape boton({200, 40});
+    boton.setPosition(50, 300); 
+    boton.setFillColor(sf::Color::Black);
+    
+    sf::Text textoBoton("Agregar", font, 20);
+    textoBoton.setPosition(115, 310); 
+    textoBoton.setFillColor(sf::Color::White);
     
     sf::Text textoError("", font, 20);
-    textoError.setPosition(20, 310);
+    textoError.setPosition(20, 350);
     textoError.setFillColor(sf::Color::Red);
     
-    // focus en textos
-    bool focoUsuario = false;
-    bool focoContrasena = false;
+    bool focoID = false;
+    bool focoNombre = false;
+    bool focoMaestro = false;
 
     while (addWindow.isOpen()) {
         sf::Event event;
         while (addWindow.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 addWindow.close();
-            
-            if (event.type == sf::Event::MouseButtonPressed) {
-                focoUsuario = campoNombre .getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y);
-                focoContrasena = campoMaestro.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y);
             }
             
-            // Captura el texto ingresado
+            if (event.type == sf::Event::MouseButtonPressed) {
+                focoID = campoID.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y);
+                focoNombre = campoNombre.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y);
+                focoMaestro = campoMaestro.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y);
+            }
+            
             if (event.type == sf::Event::TextEntered) {
-                if (focoUsuario) {
+                if (focoID) {
+                    if (event.text.unicode == '\b' && !textoInputID.getString().isEmpty()) {
+                        std::string str = textoInputID.getString();
+                        str.pop_back();
+                        textoInputID.setString(str);
+                    } else if (event.text.unicode >= 32 && event.text .unicode <= 126) {
+                        textoInputID.setString(textoInputID.getString() + static_cast<char>(event.text.unicode));
+                    }
+                } else if (focoNombre) {
                     if (event.text.unicode == '\b' && !textoInputNombre.getString().isEmpty()) {
                         std::string str = textoInputNombre.getString();
                         str.pop_back();
@@ -254,45 +276,56 @@ void GestorClases::addClass(){
                     } else if (event.text.unicode >= 32 && event.text.unicode <= 126) {
                         textoInputNombre.setString(textoInputNombre.getString() + static_cast<char>(event.text.unicode));
                     }
-                } else if (focoContrasena) {
+                } else if (focoMaestro) {
                     if (event.text.unicode == '\b' && !textoInputMaestro.getString().isEmpty()) {
-                         std::string str = textoInputMaestro.getString();
+                        std::string str = textoInputMaestro.getString();
                         str.pop_back();
                         textoInputMaestro.setString(str);
                     } else if (event.text.unicode >= 32 && event.text.unicode <= 126) {
-                    	textoInputMaestro.setString(textoInputMaestro.getString() + static_cast<char>(event.text.unicode));
+                        textoInputMaestro.setString(textoInputMaestro.getString() + static_cast<char>(event.text.unicode));
                     }
                 }
             }
+            
+            std::string claseID = textoInputID.getString();
             std::string claseNombre = textoInputNombre.getString();
             std::string usuarioActual = textoInputMaestro.getString();
             std::string type = "MAESTRO";
-          	vector <Maestro> usuarios;
-			gestorCuentas.leerMaestros(usuarios);
+            std::vector<Maestro> usuarios;
+            gestorCuentas.leerMaestros(usuarios);
         
-		    if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.type == sf::Event::MouseButtonPressed) {
                 if (boton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                    if (textoInputNombre.getString().isEmpty() || textoInputMaestro.getString().isEmpty()) {
-                        textoError.setString("Por favor, complete ambos campos.");
-                    } 
-                    for (Maestro _user:usuarios){
-                      	if (_user.getUser()==usuarioActual && _user.getTipo()==type){
-                      		this->getUser().crearClase(claseNombre, _user);
-                        	addWindow.close();
-                    	} else {
-                    		textoError.setString("Usuario no es valido.");
-						}
+                    if (textoInputID.getString().isEmpty() || textoInputNombre.getString().isEmpty() || textoInputMaestro.getString().isEmpty()) {
+                        textoError.setString("Por favor, complete todos los campos.");
+                    } else {
+                        bool usuarioValido = false;
+                        for (Maestro _user : usuarios) {
+                            if (_user.getUser () == usuarioActual && _user.getTipo() == type) {
+                                this->getUser ().crearClase(std::stoi(claseID), claseNombre, _user);
+                                addWindow.close();
+                                usuarioValido = true;
+                                break;
+                            }
+                        }
+                        if (!usuarioValido) {
+                            textoError.setString("Usuario no es válido.");
+                        }
+                    }
                 }
             }
         }
-        
+
         addWindow.clear(sf::Color::White);
         addWindow.draw(titulo);
-        addWindow.draw(maestroTxt);
+        addWindow.draw(idTxt);
+        addWindow.draw(campoID);
+        addWindow.draw(textoInputID);
         addWindow.draw(nomTxt);
-        addWindow.draw(campoNombre );
-        addWindow.draw(campoMaestro);
+        addWindow.draw(campoNombre);
         addWindow.draw(textoInputNombre);
+        addWindow.draw(maestroTxt);
+        addWindow.draw(campoMaestro);
         addWindow.draw(textoInputMaestro);
         addWindow.draw(boton);
         addWindow.draw(textoBoton);
@@ -301,7 +334,6 @@ void GestorClases::addClass(){
         }
         addWindow.display();
     }
-}
 }
 
 void GestorClases::eliminarClase(){
@@ -364,7 +396,6 @@ void GestorClases::eliminarClase(){
             }
             
             std::string usuarioActual = textoInputUsuario.getString();
-		 	std::string type = "MAESTRO";
             vector <Clase> clases;
 			this->getUser().leerClases(clases);
             

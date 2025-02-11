@@ -9,79 +9,85 @@
 #include <sstream>
 
 
-Registro::Registro(const string& tipo,const string& user,const string& pass)
+	Registro::Registro(const string& tipo,const string& user,const string& pass)
 		: Usuario(tipo,user,pass){
-		}
+	}
 		
-		string Registro::LowerCase(const std::string& str) {
+	string Registro::LowerCase(const std::string& str) {
    		 string lowerStr = str;
     	 transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
     		return lowerStr;
-		}
+	}
 		
 
 		
-void Registro::crearClase(string& nombre, Maestro& profesor) {
-    Clase nuevaClase(nombre, profesor);
-    clases.push_back(nuevaClase);
+	void Registro::crearClase(int id, string& nombre, Maestro& profesor) {
+        Clase nuevaClase(id, nombre, profesor);
+        clases.push_back(nuevaClase);
 
-    ofstream archivo("clases.txt", ios::app);
-    
-    if (!archivo) {
-        cout << "Error al abrir el archivo de clases.\n";
-        return;
-    }
-
-    archivo << nombre << "," << profesor.getUser() << "\n";
-    
-    archivo.close();
-}
-
-void Registro::leerClases(vector<Clase>& clases) {
-    ifstream archivo("clases.txt");
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo de clases.\n";
-        return;
-    }
-
-    string linea;
-    while (getline(archivo, linea)) {
-        // Suponemos que cada línea tiene el formato: nombreClase,nombreMaestro
-        size_t pos = linea.find(',');
-        if (pos != string::npos) {
-            string nombreClase = linea.substr(0, pos);
-            string nombreMaestro = linea.substr(pos + 1);
-
-            // Aquí deberías crear un objeto Maestro usando el nombre del maestro
-            Maestro maestro("tipo", nombreMaestro, "pass"); // Asigna valores por defecto o ajusta según tu lógica
-
-            // Crear una nueva clase y agregarla al vector
-            Clase nuevaClase(nombreClase, maestro);
-            clases.push_back(nuevaClase);
+        ofstream archivo("clases.txt", ios::app);
+        if (!archivo) {
+            cerr << "Error al abrir el archivo de clases." << endl;
+            return;
         }
-    }
+        archivo << id << "|" << nombre << "|" << profesor.getUser () << "\n";
+        archivo.close();
 
-    archivo.close();
-}
-		
-void Registro::eliminarClase(const string& nombreClase) {
-    vector<Clase> clases;
-    leerClases(clases); // Primero, lee todas las clases
-
-    ofstream archivo("clases.txt", ios::trunc); // Abre el archivo en modo truncado para reescribirlo
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo para eliminar la clase.\n";
-        return;
-    }
-
-    for (const auto& clase : clases) {
-        if (clase.getNombre() != nombreClase) {
-            archivo << clase.getNombre() << "," << clase.getMaestro().getUser() << endl; // Escribe las clases que no se eliminan
+        string archivoClase = "clases/" + to_string(id) + "_" + nombre + ".txt";
+        ofstream archivoClaseIndividual(archivoClase);
+        if (!archivoClaseIndividual) {
+            cerr << "Error al crear " << archivoClase << endl;
+            return;
         }
+        archivoClaseIndividual.close();
+        cout << "Clase creada exitosamente: " << nombre << endl;
     }
 
-    archivo.close();
-}
+    void Registro::leerClases(vector<Clase>& clases) {
+        ifstream archivo("clases.txt");
+        if (!archivo.is_open()) {
+            cerr << "Error al abrir el archivo de clases." << endl;
+            return;
+        }
+
+        string linea;
+        while (getline(archivo, linea)) {
+            size_t pos1 = linea.find('|');
+            size_t pos2 = linea.find('|', pos1 + 1);
+            if (pos1 != string::npos && pos2 != string::npos) {
+                int id = stoi(linea.substr(0, pos1));
+                string nombreClase = linea.substr(pos1 + 1, pos2 - pos1 - 1);
+                string nombreMaestro = linea.substr(pos2 + 1);
+                Maestro maestro("tipo", nombreMaestro, "pass");
+                Clase nuevaClase(id, nombreClase, maestro);
+                clases.push_back(nuevaClase);
+            }
+        }
+        archivo.close();
+    }
+
+    void Registro::eliminarClase(const string& nombreClase) {
+        vector<Clase> clases;
+        leerClases(clases);
+
+        ofstream archivo("clases.txt", ios::trunc);
+        if (!archivo.is_open()) {
+            cerr << "Error al abrir el archivo para eliminar la clase." << endl;
+            return;
+        }
+
+        for (const auto& clase : clases) {
+            if (clase.getNombre() != nombreClase) {
+                archivo << clase.getId() << "|" << clase.getNombre() << "|" << clase.getMaestro().getUser () << endl;
+            } else {
+                string archivoClase = "clases/" + to_string(clase.getId()) + "_" + clase.getNombre() + ".txt";
+                if (remove(archivoClase.c_str()) != 0) {
+                    cerr << "Error al eliminar el archivo " << archivoClase << endl;
+                }
+            }
+        }
+        archivo.close();
+    }
 
 
 void Registro::run() {

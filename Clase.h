@@ -12,7 +12,13 @@
 
 class Clase {
 private:
+    int id;
     std::string nombre;
+    std::string hora;
+    int unidadesValorativas;
+    int semestre;
+    std::string periodo;
+    int anio;
     Maestro maestro;
     std::vector<Alumno> alumnos;
     std::vector<Examen> examenes;
@@ -22,19 +28,26 @@ private:
 
 public:
     // Constructor
-    Clase(const std::string& nombre, const Maestro& maestro);
+    Clase(int id, const std::string& nombre, const Maestro& maestro);
 
-    //metodos
+    // Métodos
+    int getId() const;
     std::string getNombre() const;
+    std::string getHora() const;
+    int getUnidadesValorativas() const;
+    int getSemestre() const;
+    std::string getPeriodo() const;
+    int getAnio() const;
     const Maestro& getMaestro() const;
-    std::vector<Alumno> getAlumnos() ;
+    std::vector<Alumno> getAlumnos();
     int getPuntos();
 
-    void asignarAlumno(const Alumno& alumno); 
+    void asignarAlumno(const Alumno& alumno);
     void asignarMaestro(const Maestro& docente);
-    void agregarTarea(const Tarea& ta); 
-    void agregarExamen(Examen& ex); 
+    void agregarTarea(const Tarea& ta);
+    void agregarExamen(Examen& ex);
     void guardarCursoEnArchivo();
 };
 
 #endif
+
